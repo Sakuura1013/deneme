@@ -16,3 +16,4 @@ while True:
         print(meme_sozlugu[kelime])
     else:
         print("Bu kelime sözlüğümüzde yok.")
+    
