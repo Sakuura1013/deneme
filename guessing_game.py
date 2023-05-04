@@ -8,25 +8,32 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix='$', intents=intents)
+number = 0
 
 @bot.event
 async def on_ready():
     print(f'{bot.user} olarak giriş yaptık')
 
 @bot.command()
+async def how2play(ctx):
+    await ctx.send('Type "$guess" to start the game.')
+    await ctx.send('Type "$attempt" to make a prediction.')
+
+
+@bot.command()
 async def guess(ctx):
     await ctx.send('Guess a number between 1 and 10.')
+    global number
+    number = random.randint(1, 10)
 
-    answer = random.randint(1, 10)
+@bot.command()
+async def attempt(ctx, guess=0):  
+    global number 
+    await ctx.send(f'Your guess is {guess}!')
+    if (guess==number):
+        await ctx.send("おめでとうございます！")
+    else: 
+        await ctx.send("Try again!")
 
-    try:
-        guess = await Self.wait_for('message', check=is_correct, timeout=5.0)
-        except asyncio.TimeoutError:
-            return await discord.Message.channel.send(f'Sorry, you took too long it was {answer}.')
-
-        if int(guess.content) == answer:
-            await message.channel.send('You are right!')
-        else:
-            await message.channel.send(f'Oops. It is actually {answer}.')
 
 bot.run("TOKEN")
